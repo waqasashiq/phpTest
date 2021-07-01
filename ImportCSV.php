@@ -70,7 +70,7 @@ else {
                             . "|[A-HK-Y][0-9]([0-9]|[ABEHMNPRV-Y]))"
                             . "|[0-9][A-HJKS-UW])\\s?[0-9][ABD-HJLNP-UW-Z]{2}$~i",
                             $PostCode)) {
-                            
+
 
 
                             echo "this is sucessfull record can be uploaded";
