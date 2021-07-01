@@ -11,6 +11,7 @@
     <link href="css/mystylesheet.css" rel="stylesheet" />
 </head>
 <body>
+
 <div>
 
     <div class="topnav">
@@ -19,25 +20,24 @@
     </div>
 
 </div>
-
-<div class="split left">
-    <div class="centered">
-        <div class="container">
-            <a class="link" href=ImportUsers.php title="ImportUsersPage">
-                <h2>Click here to import users</h2>
-            </a>
-        </div>
+<div class="row">
+    <div class="col-md-4 centered">
+        <h2>This is just a dummy test for now</h2>
+        </form>
     </div>
 </div>
-<div class="split right">
-    <div class="centered">
-        <div class="container">
-            <a class= "link" href=DispUsers.php title="DisplayUsersPage">
-                <h2>Click here to Display users</h2>
-            </a>
-        </div>
-    </div>
-</div>
+<?php
+$sql = "SELECT * FROM users ORDER BY lastname";
+$result = $conn->query($sql);
 
+if ($result->num_rows > 0) {
+    // output data of each row
+    while($row = $result->fetch_assoc()) {
+        echo "<br> First Name ". $row["FName"]. " - Last Name: ". $row["LName"]. " " . $row["lastname"] . "<br>";
+    }
+} else {
+    echo "0 results";
+}
+?>
 </body>
 </html>

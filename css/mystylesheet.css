@@ -19,6 +19,12 @@ body {
     text-align: center;
 }
 
+A {text-decoration: none;}
+.link { color: #ffffff;
+} /* CSS link color (red) */
+.link:hover { color: black;
+    text-decoration: none;
+} /* CSS link hover (green) */
 .split {
     height: 100%;
     width: 50%;

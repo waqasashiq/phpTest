@@ -15,8 +15,10 @@
 <div>
 
     <div class="topnav">
-        <h1>Connect</h1>
+        <a class= "link" href=Home.html title="HomePage">
+            <h1>Connect</h1>
         <p>PHP coding challenge</p>
+            </a>
     </div>
 
 </div>

@@ -1,4 +1,5 @@
 <?php
+include_once 'dbConfig.php';
 $target_dir = "uploads/";
 $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 echo $target_file;
@@ -31,7 +32,6 @@ if ($uploadOk == 0) {
 
 
 else {
-
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
         echo "The file ". htmlspecialchars( basename( $_FILES["fileToUpload"]["name"])). " has been uploaded.";
     } else {
@@ -39,17 +39,13 @@ else {
     }
     // Open uploaded CSV file with read-only mode
     $csvFile = fopen($target_file, 'r');
-    echo "File is not opened 1";
 
     // Skip the first line
     fgetcsv($csvFile);
-
+            $i=0;
     while(($line = fgetcsv($csvFile)) !== FALSE){
         // Get row data
-        echo "File is opened";
-        echo $line[0];
-
-        $first_Name= $line[0];
+        $First_Name= $line[0];
         $Last_Name= $line[1];
         $Email= $line[2];
         $User_name= $line[3];
@@ -59,10 +55,31 @@ else {
         $County= $line[7];
         $PostCode= $line[8];
 
-        if (preg_match("/^[a-zA-Z0-9]*$/",$User_name)) {
 
-            if (preg_match( "^[a-zA-Z0-9]{4,16}$" , $Password)) {
-                if (preg_match( "([a-z0-9_\-]+)@([a-z0-9_\-]+\.[a-z0-9\-\._\-]+)" , $Email)) {
+        if (preg_match("/^[a-zA-Z0-9]*$/",$User_name)) {
+            // Check whether member already exists in the database with the same email
+            echo "Check one passed";
+            $prevQuery = "SELECT UserName FROM users WHERE UserName = '".$line[1]."'";
+            $prevResult = $db->query($prevQuery);
+
+            if($prevResult->num_rows > 0){
+                // Deleting all the data from tables.
+
+                echo "Check 2 failed deleting while form and terminating";
+                echo $line[0];
+                $prevQuery = ("DELETE FROM address");
+                $prevResult2 = $db->query($prevQuery);
+
+                $prevQuery = ("DELETE FROM users");
+                $prevResult1 = $db->query($prevQuery);
+
+
+
+            }
+            if (preg_match( "/^[a-zA-Z0-9]{4,16}$/" , $Password)) {
+                if (filter_var($Email, FILTER_VALIDATE_EMAIL)) {
+
+
                         if (preg_match(
                             "~^(GIR 0AA)|(TDCU 1ZZ)|(ASCN 1ZZ)|(BIQQ 1ZZ)|(BBND 1ZZ)"
                             . "|(FIQQ 1ZZ)|(PCRN 1ZZ)|(STHL 1ZZ)|(SIQQ 1ZZ)|(TKCA 1ZZ)"
@@ -70,19 +87,29 @@ else {
                             . "|[A-HK-Y][0-9]([0-9]|[ABEHMNPRV-Y]))"
                             . "|[0-9][A-HJKS-UW])\\s?[0-9][ABD-HJLNP-UW-Z]{2}$~i",
                             $PostCode)) {
+                            // Insert member data in the database
+                            $db->query("INSERT INTO users (FName, LName, UserName, Email, Password)
+                                        VALUES ('".$First_Name."', '".$Last_Name."', '".$User_name."', '".$Email."', '".$Password."')");
+                            $db->query("INSERT INTO address (UserName, Street, City, County, PostCode)
+                                        VALUES ('".$User_name."', '".$Street."', '".$City."', '".$County."', '".$PostCode."')");
 
 
 
                             echo "this is sucessfull record can be uploaded";
-                            echo $i;
                             $i++;
+
                         }
                 }
             }
         }
         else{
-            echo "this is NOT sucessfull record cant be uploaded";
+            echo "File is opened record cant be uploaded";
+            print_r($line);
         }
+
+
     }
-}
+
+    echo"The number of records uploaded is: ";
+    echo $i;}
 ?>
