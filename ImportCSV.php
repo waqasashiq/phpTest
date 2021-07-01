@@ -18,7 +18,7 @@ if ($_FILES["fileToUpload"]["size"] > 500000) {
 
 // Allow certain file formats
 if($imageFileType != "csv") {
-    echo "Sorry, only CSV files are allowed.";
+    echo "Sorry, only CSV files are allowed. test";
     $uploadOk = 0;
 }
 
