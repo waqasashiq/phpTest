@@ -11,7 +11,7 @@
     <link href="css/mystylesheet.css" rel="stylesheet" />
 </head>
 <body>
-
+ 
 <div>
 
     <div class="topnav">
@@ -21,23 +21,61 @@
 
 </div>
 <div class="row">
-    <div class="col-md-4 centered">
-        <h2>This is just a dummy test for now</h2>
-        </form>
-    </div>
+    
 </div>
 <?php
-$sql = "SELECT * FROM users ORDER BY lastname";
-$result = $conn->query($sql);
+include_once 'dbConfig.php';
+$sql = "SELECT users.Fname, users.Lname,users.UserName, users.Email,address.Street, address.City,address.County,address.PostCode  FROM  users  INNER JOIN  address  ON users.UserName=address.UserName;";
+$result = $db->query($sql);
+ 
+
 
 if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "<br> First Name ". $row["FName"]. " - Last Name: ". $row["LName"]. " " . $row["lastname"] . "<br>";
+    
+    echo '<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">First Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">User Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Street</th>
+        <th scope="col">City</th>
+        <th scope="col">County</th>
+        <th scope="col">Post Code</th>
+   </tr>
+   ';
+   echo' <tbody>
+  
+     ';
+    while($row =  $result->fetch_assoc()) {
+        echo ' <tr>';
+         echo '<td>'.$row["Fname"].'</td>' ;
+         echo '<td>'.$row["Lname"].'</td>' ;
+         echo '<td>'.$row["UserName"].'</td>' ;
+         echo '<td>'.$row["Email"].'</td>' ;
+         echo '<td>'.$row["Street"].'</td>' ;
+         echo '<td>'.$row["City"].'</td>' ;
+         echo '<td>'.$row["County"].'</td>' ;
+         echo '<td>'.$row["PostCode"].'</td>' ;
+         
+        echo '</tr>';
+
+
+
+
+
+    //  print_r($row);
+       // echo "<br> First Name ". $row["FName"]. " - Last Name: ". $row["LName"]. " "  . "<br>";
     }
 } else {
     echo "0 results";
 }
+echo ' </tr>
+      
+</tbody>
+</table>';
 ?>
 </body>
 </html>
